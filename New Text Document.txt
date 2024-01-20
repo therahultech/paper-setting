@@ -1,0 +1,75 @@
+PS C:\xampp7.3\htdocs\paper-setting> composer install --optimize-autoloader --no-dev
+Installing dependencies from lock file
+Verifying lock file contents can be installed on current platform.
+Package operations: 0 installs, 0 updates, 36 removals
+  - Removing theseer/tokenizer (1.2.1)
+  - Removing sebastian/version (3.0.2)
+  - Removing sebastian/type (3.2.1)
+  - Removing sebastian/resource-operations (3.0.3)
+  - Removing sebastian/recursion-context (4.0.5)
+  - Removing sebastian/object-reflector (2.0.4)
+  - Removing sebastian/object-enumerator (4.0.4)
+  - Removing sebastian/lines-of-code (1.0.3)
+  - Removing sebastian/global-state (5.0.6)
+  - Removing sebastian/exporter (4.0.5)
+  - Removing sebastian/environment (5.1.5)
+  - Removing sebastian/diff (4.0.5)
+  - Removing sebastian/complexity (2.0.2)
+  - Removing sebastian/comparator (4.0.8)
+  - Removing sebastian/code-unit-reverse-lookup (2.0.3)
+  - Removing sebastian/code-unit (1.0.8)
+  - Removing sebastian/cli-parser (1.0.1)
+  - Removing phpunit/phpunit (9.6.11)
+  - Removing phpunit/php-timer (5.0.3)
+  - Removing phpunit/php-text-template (2.0.4)
+  - Removing phpunit/php-invoker (3.1.1)
+  - Removing phpunit/php-file-iterator (3.0.6)
+  - Removing phpunit/php-code-coverage (9.2.27)
+  - Removing phar-io/version (3.2.1)
+  - Removing phar-io/manifest (2.0.3)
+  - Removing nunomaduro/collision (v5.11.0)
+  - Removing myclabs/deep-copy (1.11.1)
+  - Removing mockery/mockery (1.6.6)
+  - Removing laravel/sail (v1.19.0)
+  - Removing hamcrest/hamcrest-php (v2.0.1)
+  - Removing filp/whoops (2.15.3)
+  - Removing fakerphp/faker (v1.20.0)
+  - Removing facade/ignition-contracts (1.0.2)
+  - Removing facade/ignition (2.17.7)
+  - Removing facade/flare-client-php (1.10.0)
+  - Removing doctrine/instantiator (1.5.0)
+Package fruitcake/laravel-cors is abandoned, you should avoid using it. No replacement was suggested.
+Package swiftmailer/swiftmailer is abandoned, you should avoid using it. Use symfony/mailer instead.
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover --ansi
+Discovered Package: fruitcake/laravel-cors
+Discovered Package: laravel/breeze
+Discovered Package: laravel/sanctum
+Discovered Package: laravel/tinker
+Discovered Package: nesbot/carbon
+Discovered Package: spatie/laravel-permission
+Package manifest generated successfully.
+49 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+PS C:\xampp7.3\htdocs\paper-setting> php artisan config:cache
+Configuration cache cleared!
+Configuration cached successfully!
+PS C:\xampp7.3\htdocs\paper-setting> php artisan route:cache
+Route cache cleared!
+Routes cached successfully!
+PS C:\xampp7.3\htdocs\paper-setting> php artisan view:cache
+Compiled views cleared!
+Blade templates cached successfully!
+PS C:\xampp7.3\htdocs\paper-setting>
+
+
+
+
+
+
+
+
+
+
+
