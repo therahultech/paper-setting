@@ -10,6 +10,8 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaperAllocationController;
 use App\Http\Controllers\PaperUploadController;
+use App\Http\Controllers\MailController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +31,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+
+Route::get('/mail', [MailController::class, 'index'])->name('mail.index');
+
 
 Route::group(['middleware' => 'auth'], function() {
     Route::resource('course',CourseController::class);
