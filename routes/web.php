@@ -11,6 +11,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaperAllocationController;
 use App\Http\Controllers\PaperUploadController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\PhpMailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/mail', [MailController::class, 'index'])->name('mail.index');
+
+
+Route::get('send-php-mail',[PhpMailController::class, 'index'])->name('send.php.mailer');
+Route::post('send-php-mailer-submit',[PhpMailController::class, 'store'])->name('send.php.mailer.submit');
 
 
 Route::group(['middleware' => 'auth'], function() {
