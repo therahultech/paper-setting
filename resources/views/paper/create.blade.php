@@ -315,7 +315,7 @@ $(document).ready(function() {
 
                 // Make an AJAX request to fetch events based on the selected session_id
                 $.ajax({
-                    url: '/getEventsBySessionId/' + session_id,
+                    url: 'getEventsBySessionId/' + session_id,
                     method: 'GET',
                     dataType: 'json',
                     success: function(response) {
