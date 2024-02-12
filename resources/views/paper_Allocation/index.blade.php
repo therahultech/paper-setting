@@ -116,6 +116,10 @@
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper_upload && $paper_Allocation->paper_upload->final_submit ? 'Yes':'No'}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
+
+                                @if($paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set1_uploaded || $paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set2_uploaded)
+
+                                @else
                                     @can('paper_Allocation-edit')
                                     <a href="{{ url('paper_Allocation/'.$paper_Allocation->id.'/edit') }}" class="inline-block float-left"><i class="fa-solid fa-pen-to-square px-4"></i></a> 
                                     @endcan
@@ -129,6 +133,7 @@
                                     </form>
                                     
                                     @endcan
+                                @endif
                                 </td>
                             </tr>
                             @endforeach

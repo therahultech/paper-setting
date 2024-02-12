@@ -7,6 +7,7 @@ use App\Http\Requests\StorePaper_AllocationRequest;
 use App\Http\Requests\UpdatePaper_AllocationRequest;
 use App\Models\Paper;
 use App\Models\Teacher;
+use App\Http\Controller\PhpMailController;
 
 class PaperAllocationController extends Controller
 {
@@ -54,20 +55,48 @@ class PaperAllocationController extends Controller
     public function store(StorePaper_AllocationRequest $request)
     {
         //
+
+        $phpMailController = app()->make('App\Http\Controllers\PhpMailController');
+
         $validated = $request->validate([
             'paper_id'=>'required',
             'teacher_id'=>'required',
      
         ]);
 
-        $paper_Allocation = new Paper_Allocation;
-        $paper_Allocation->paper_id = $request->input('paper_id');
-        $paper_Allocation->teacher_id = $request->input('teacher_id');
-        $paper_Allocation->status = $request->input('status');
-        $paper_Allocation->created_by = $request->user()->id;
-        $paper_Allocation->save();
+        // $paper_Allocation = new Paper_Allocation;
+        // $paper_Allocation->paper_id = $request->input('paper_id');
+        // $paper_Allocation->teacher_id = $request->input('teacher_id');
+        // $paper_Allocation->status = $request->input('status');
+        // $paper_Allocation->created_by = $request->user()->id;
+        // $paper_Allocation->save();
 
         // return $paper_Allocation;
+        $teacher = Teacher::find($request->input('teacher_id'));
+        $paper = Paper::with('course','session','event','subject')->where('paper.id','=',$request->input('paper_id'))->first();
+
+        // var_dump($teacher);
+        // dd($paper);
+
+        $email_to = $teacher->email;
+        $email_subject = 'Paper Setting : '.$paper->subject->code.'-'.$paper->subject->name.' ('.$paper->exam_paper_id.') has been alloted.';
+        $data_for_email['teacher']=$teacher->name_prefix.' '.$teacher->name;
+        $data_for_email['course']=$paper->course->code.'-'.$paper->course->name;
+        $data_for_email['session']=$paper->session->name;
+        $data_for_email['event']=$paper->event->name;
+        $data_for_email['semYear']=$paper->semester_id?$paper->semester_id:$paper->year_id;
+        $data_for_email['paper']=$paper->subject->code.'-'.$paper->subject->name.' ('.$paper->exam_paper_id.')';
+
+        echo '<br>email_to:'.$email_to;
+        echo '<br>email_sub:'.$email_subject;
+        echo '<br><pre>:';
+        // dd($data_for_email);
+
+        // $email_response = PhpMailController::send_paper_allot_email($email_to,$email_subject,$data_for_email);
+        $email_response = $phpMailController->send_paper_allot_email($email_to,$email_subject,$data_for_email);
+
+        print_r($email_response);
+
 
         return redirect('paper_Allocation')->with('status','Paper Allocated Successfully');
     }

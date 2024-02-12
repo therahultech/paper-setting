@@ -61,4 +61,44 @@ class PhpMailController extends Controller
                 return back()->with('error','Message could not be sent.');
         }
     }
+
+    public function send_paper_allot_email($email_to,$email_subject,$email_data)
+    {
+        $mail = new PHPMailer(true);
+    
+        try {
+    
+            /* Email SMTP Settings */
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host = env('MAIL_HOST');
+            $mail->SMTPAuth = true;
+            $mail->Username = env('MAIL_USERNAME');
+            $mail->Password = env('MAIL_PASSWORD');
+            $mail->SMTPSecure = env('MAIL_ENCRYPTION');
+            $mail->Port = env('MAIL_PORT');
+    
+            $mail->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+            $mail->addAddress($email_to);
+    
+            $mail->isHTML(true);
+    
+            $mail->Subject = $email_subject;
+            $mail->Body    = view('emails.paper_allocated_mail',compact('email_data','email_subject'))->render();
+    
+            if( !$mail->send() ) {
+
+                // return back()->with("error", "Email not sent.")->withErrors($mail->ErrorInfo);
+                return false;
+            }
+                
+            else {
+                // return back()->with("success", "Email has been sent.");
+                return true;
+            }
+    
+        } catch (Exception $e) {
+                return back()->with('error','Message could not be sent.');
+        }
+    }
 }
