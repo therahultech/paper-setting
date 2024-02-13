@@ -3180,6 +3180,9 @@ input[type="range"]:active::-webkit-slider-thumb {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.hover\:underline:hover {
+  text-decoration-line: underline;
+}
 .hover\:\!opacity-90:hover {
   opacity: 0.9 !important;
 }
@@ -4011,9 +4014,9 @@ input[type="range"]:active::-webkit-slider-thumb {
   --tw-border-opacity: 1;
   border-color: rgb(220 76 100 / var(--tw-border-opacity));
 }
-:is(.dark .dark\:border-gray-700) {
+:is(.dark .dark\:border-gray-600) {
   --tw-border-opacity: 1;
-  border-color: rgb(55 65 81 / var(--tw-border-opacity));
+  border-color: rgb(75 85 99 / var(--tw-border-opacity));
 }
 :is(.dark .dark\:border-neutral-400) {
   --tw-border-opacity: 1;
@@ -4038,10 +4041,6 @@ input[type="range"]:active::-webkit-slider-thumb {
 :is(.dark .dark\:bg-gray-800) {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-}
-:is(.dark .dark\:bg-gray-900) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
 :is(.dark .dark\:bg-neutral-600) {
   --tw-bg-opacity: 1;
@@ -4095,10 +4094,6 @@ input[type="range"]:active::-webkit-slider-thumb {
 :is(.dark .dark\:text-gray-400) {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
-}
-:is(.dark .dark\:text-gray-500) {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 :is(.dark .dark\:text-neutral-200) {
   --tw-text-opacity: 1;
@@ -4345,10 +4340,6 @@ input[type="range"]:active::-webkit-slider-thumb {
     display: none;
   }
 
-  .sm\:h-20 {
-    height: 5rem;
-  }
-
   .sm\:w-full {
     width: 100%;
   }
@@ -4390,8 +4381,8 @@ input[type="range"]:active::-webkit-slider-thumb {
     padding-top: 0px;
   }
 
-  .sm\:text-left {
-    text-align: left;
+  .sm\:text-center {
+    text-align: center;
   }
 
   .sm\:text-right {
@@ -4417,6 +4408,10 @@ input[type="range"]:active::-webkit-slider-thumb {
     margin-bottom: 0px;
   }
 
+  .md\:flex {
+    display: flex;
+  }
+
   .md\:w-4\/12 {
     width: 33.333333%;
   }
@@ -4433,12 +4428,16 @@ input[type="range"]:active::-webkit-slider-thumb {
     flex-direction: row;
   }
 
-  .md\:border-l {
-    border-left-width: 1px;
+  .md\:items-center {
+    align-items: center;
   }
 
-  .md\:border-t-0 {
-    border-top-width: 0px;
+  .md\:justify-between {
+    justify-content: space-between;
+  }
+
+  .md\:p-6 {
+    padding: 1.5rem;
   }
 
   .md\:pr-1 {
