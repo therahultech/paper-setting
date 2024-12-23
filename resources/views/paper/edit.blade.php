@@ -41,7 +41,7 @@
 
                         <!-- Column -->
                         <div class="col-span-12 md:col-span-12 xl:col-span-12">
-                            <form method="POST" action="{{ url('paper/'.$paper->id) }}" onsubmit="return validateForm()">
+                            <form method="POST" action="{{ url('paper/'.$paper->id) }}" onsubmit="return validateForm()" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 
@@ -226,7 +226,43 @@
                                     class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
                                     >Exam Paper ID
                                 </label>
-                                </div>                                   
+                                </div>   
+                                
+                                
+                                <div class="relative mb-6" >
+                                <label
+                                    for="uploaded_file"
+                                    class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                                    >Scheme/Syllabus File Upload</label
+                                >
+
+                                @if($paper->uploaded_file)
+                                        <a 
+                                href="{{ asset($paper->uploaded_file)}}" 
+                                target="_blank"
+                                class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                >Download Uploaded</a>
+                                @else
+                                Not Uploaded
+                                @endif
+                               
+                                <input
+                                    class="@error('uploaded_file') is-invalid @enderror relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] font-normal leading-[2.15] text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                                    id="uploaded_file"
+                                    name="uploaded_file"
+                                    type="file" 
+                                    accept=".zip"
+                                    />
+                                
+                                @error('uploaded_file')
+                                <div
+                                    class="absolute w-full text-sm text-neutral-500 peer-focus:text-primary dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    data-te-input-helper-ref>
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                                </div>
+
 
                                 <div
                                 class="mb-6 flex min-h-[1.5rem] pl-[1.5rem]">

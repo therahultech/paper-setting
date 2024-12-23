@@ -2,7 +2,7 @@ import {
   Sidenav,
   Dropdown,
   Ripple,
-  initTE,
+  initTE
 } from "tw-elements";
 
 initTE({ Sidenav, Dropdown, Ripple });

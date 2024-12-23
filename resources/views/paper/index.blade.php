@@ -52,6 +52,7 @@
                                 <th scope="col" class="px-6 py-4">Semster/Year</th>
                                 <th scope="col" class="px-6 py-4">Subject</th>
                                 <th scope="col" class="px-6 py-4">Paper ID</th>
+                                <th scope="col" class="px-6 py-4">File</th>
                                 <th scope="col" class="px-6 py-4">Status</th>
                                 <th scope="col" class="px-6 py-4">Actions</th>
 
@@ -67,6 +68,17 @@
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper->semester->id?'Sem-'.$paper->semester->name:'Year'.$paper->year->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper->subject->code.'-'.$paper->subject->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper->exam_paper_id}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">
+                                @if($paper->uploaded_file)
+                                        <a 
+                                href="{{ asset($paper->uploaded_file)}}" 
+                                target="_blank"
+                                class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                >Download</a>
+                                @else
+                                NA
+                                @endif
+                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper->status==1?'Active':'Inactive'}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     @can('paper-edit')

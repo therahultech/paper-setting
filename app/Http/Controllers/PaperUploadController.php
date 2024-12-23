@@ -7,6 +7,9 @@ use App\Http\Requests\StorePaper_UploadRequest;
 use App\Http\Requests\UpdatePaper_UploadRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Paper_Allocation;
+use App\Models\RemunerationBill;
+use App\Models\Remuneration;
+
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -256,6 +259,161 @@ class PaperUploadController extends Controller
     public function show(Paper_Upload $paper_Upload)
     {
         //
+    }
+
+    public function viewBill($paper_upload_id)
+    {
+        $current_user = Auth::user();
+        $remuneration = Remuneration::where('status', 1)->first();
+        // dd($current_user);
+        $current_user_id = $current_user->id;
+        
+        if($current_user->hasRole('Super_Admin')){
+            // $paper_Allocations_with_upload = Paper_Allocation::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject')->get();
+        
+
+            $paper_Allocations_with_upload = Paper_Allocation::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload')
+            // ->whereHas('teacher.user', function ($query) use ($current_user_id) {
+            //     $query->where('teacher.user_id', $current_user_id);
+            // })
+            ->whereHas('paper_upload', function ($query)  use ($paper_upload_id){
+                $query->where('paper_upload.id', $paper_upload_id);
+            })
+            // ->orWhereDoesntHave('paper_upload')
+            ->where('paper_allocation.status','=','1')
+            // ->toSql();
+            ->get();
+
+        }else if($current_user->hasRole('Teacher')){
+            $paper_Allocations_with_upload = Paper_Allocation::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload')
+            ->whereHas('teacher.user', function ($query) use ($current_user_id) {
+                $query->where('teacher.user_id', $current_user_id);
+            })
+            ->whereHas('paper_upload', function ($query)  use ($paper_upload_id){
+                $query->where('paper_upload.id', $paper_upload_id);
+            })
+            // ->orWhereDoesntHave('paper_upload')
+            ->where('paper_allocation.status','=','1')
+            // ->toSql();
+            ->get();
+        }else{
+            echo 'Auth Failed for this page.';
+
+        }
+
+        if(($paper_Allocations_with_upload[0]->paper_upload->set1_file && $paper_Allocations_with_upload[0]->paper_upload->set2_file) && $paper_Allocations_with_upload[0]->paper_upload->final_submit!=1){
+            return redirect()->back()->with('error', 'Paper is not final submitted or something is incomplete');
+        }
+
+        // dd($paper_Allocations_with_upload[0]->paper_upload);
+        // dd($paper_Allocations_with_upload);
+
+        $paper_Allocation = $paper_Allocations_with_upload[0];
+
+       
+        $remunerationBill = RemunerationBill::where('paper_upload_id', $paper_Allocation->paper_upload->id)
+            ->where('paper_allocation_id', $paper_Allocation->id)
+            ->first();
+
+        if (!$remunerationBill) {
+            // If it doesn't exist, create a new instance
+            $remunerationBill = new RemunerationBill();
+            $remunerationBill->paper_upload_id = $paper_Allocation->paper_upload->id;
+            $remunerationBill->paper_allocation_id = $paper_Allocation->id;
+            // Assign or update other values
+            $remunerationBill->course_id = $paper_Allocation->paper->course->id;
+            $remunerationBill->session_id = $paper_Allocation->paper->session->id;
+            $remunerationBill->event_id = $paper_Allocation->paper->event->id;
+            $remunerationBill->semester_id = $paper_Allocation->paper->semester->id ?? 0;
+            $remunerationBill->year_id = $paper_Allocation->year->id ?? 0;
+            $remunerationBill->paper_id = $paper_Allocation->paper->id;
+            $remunerationBill->subject_id = $paper_Allocation->paper->subject->id;
+            $remunerationBill->exam_paper_id = $paper_Allocation->paper->exam_paper_id;
+            if($paper_Allocation->paper_upload->set1_file && $paper_Allocation->paper_upload->set2_file && $paper_Allocation->paper_upload->final_submit==1){
+                $remunerationBill->paper_set_count = 2;
+            }elseif($paper_Allocation->paper_upload->set1_file || $paper_Allocation->paper_upload->set2_file){
+                $remunerationBill->paper_set_count = 1;
+            }else{
+                $remunerationBill->paper_set_count = 0;
+            }
+
+            // Teacher Details
+            $remunerationBill->user_id = $paper_Allocation->teacher->user_id;
+            $remunerationBill->teacher_id = $paper_Allocation->teacher->id;
+            $remunerationBill->acc_holder_name = $paper_Allocation->teacher->acc_holder_name;
+            $remunerationBill->bank_acc_no = $paper_Allocation->teacher->bank_acc_no;
+            $remunerationBill->bank_name = $paper_Allocation->teacher->bank_name;
+            $remunerationBill->bank_branch_name = $paper_Allocation->teacher->bank_branch_name;
+            $remunerationBill->bank_ifsc = $paper_Allocation->teacher->bank_ifsc;
+            $remunerationBill->bank_code = $paper_Allocation->teacher->bank_code;
+
+            // Remuneration Details
+            $remunerationBill->total_rem_amt = $remuneration->per_set*$remunerationBill->paper_set_count; // Fixed value, update as needed
+            $remunerationBill->rem_deduct = $remuneration->twf_deduction*$remunerationBill->paper_set_count; // Fixed value, update as needed
+            $remunerationBill->net_pay_amount = $remunerationBill->total_rem_amt-$remunerationBill->rem_deduct; // Fixed value, update as needed
+
+            // Timestamps and User Information
+            $remunerationBill->created_by = $remunerationBill->created_by ?? auth()->id(); // Preserve the creator if it already exists
+            // $remunerationBill->updated_by = auth()->id(); // Set the updater to the current user
+
+            $remunerationBill->save();
+        }
+
+        // $remunerationBill = RemunerationBill::where('paper_upload_id', $paper_Allocation->paper_upload->id)
+        // ->where('paper_allocation_id', $paper_Allocation->id)
+        // ->first();
+
+        $remunerationBill = RemunerationBill::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload','paper_allocation')
+        ->where('remuneration_bills.paper_allocation_id','=',$paper_Allocation->id)
+        ->where('remuneration_bills.paper_upload_id','=',$paper_Allocation->paper_upload->id)
+        ->first();
+
+        // dd($remunerationBill);
+        // dd($remunerationBill->toSql(), $remunerationBill->getBindings());
+
+        return view('paper_Upload.view_bill',compact('remunerationBill','paper_upload_id'));
+    }
+
+
+    public function billSubmitToSecy(Request $request)
+    {
+
+        $referer = $request->headers->get('referer');
+        $allowedDomain = url('/'.'paper_Upload/viewBill'); 
+
+        if (!str_starts_with($referer, $allowedDomain)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $current_user = Auth::user();
+        $current_user_id = $current_user->id;
+
+        if($current_user->hasRole('Super_Admin')){
+            
+            $remunerationBill = RemunerationBill::where('remuneration_bills.id','=',$request->input('id'))
+            ->first();
+            
+        }else if($current_user->hasRole('Teacher')){
+            
+            $remunerationBill = RemunerationBill::where('remuneration_bills.id','=',$request->input('id'))
+            ->where('remuneration_bills.user_id','=',$current_user_id)
+            ->first();
+        }else{
+            echo 'Auth Failed for this page.';
+        }
+
+        // dd($remunerationBill);
+        $remunerationBill->submitted_to_secy=1;
+        $remunerationBill->submitted_to_secy_datetime=date('Y-m-d H:i:s');
+        if ($remunerationBill->save()) {
+            $response_status_msg = "Submitted to Secrecy Branch successfully.";
+        } else {
+            $response_status_msg = "Failed to submit to Secrecy Branch.";
+        }
+
+
+        return redirect('paper_Upload')->with('status',$response_status_msg);
+
     }
 
     /**

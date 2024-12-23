@@ -42,7 +42,7 @@
 
                         <!-- Column -->
                         <div class="col-span-12 md:col-span-12 xl:col-span-12">
-                            <form method="POST" action="{{ url('paper') }}">
+                            <form method="POST" action="{{ url('paper') }}" enctype="multipart/form-data">
                                 @csrf
                                 
                                 <!-- start -->
@@ -226,6 +226,32 @@
                                 </label>
                                 </div>                               
 
+                                
+                                
+                                <div class="relative mb-6" >
+                                <label
+                                    for="uploaded_file"
+                                    class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                                    >Scheme/Syllabus File Upload</label
+                                >
+                               
+                                <input
+                                    class="@error('uploaded_file') is-invalid @enderror relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] font-normal leading-[2.15] text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                                    id="uploaded_file"
+                                    name="uploaded_file"
+                                    type="file" 
+                                    accept=".zip"
+                                    />
+                                
+                                @error('uploaded_file')
+                                <div
+                                    class="absolute w-full text-sm text-neutral-500 peer-focus:text-primary dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    data-te-input-helper-ref>
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                                </div>
+
                                 <div
                                 class="mb-6 flex min-h-[1.5rem] pl-[1.5rem]">
                                     <input type="hidden" name="status" value="0" />
@@ -307,34 +333,39 @@ $(document).ready(function() {
         }
     });
 
-
-    // Attach an event listener to the session_id select
-    $('#session_id').change(function() {
-                // Get the selected session_id
-                var session_id = $(this).val();
-
-                // Make an AJAX request to fetch events based on the selected session_id
-                $.ajax({
-                    url: "{{url('/getEventsBySessionId/')}}/" + session_id
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        // Clear existing options in the event_id select
-                        $('#event_id').empty();
-
-                        // Add options based on the retrieved events
-                        $.each(response.events, function(index, event) {
-                            $('#event_id').append('<option value="' + event.id + '">' + event.name + '</option>');
-                            // Assuming each event has an "id" and "name" field, adjust accordingly
-                        });
-                    },
-                    error: function(error) {
-                        console.error('Error fetching events:', error);
-                    }
+// Attach an event listener to the session_id select
+$('#session_id').change(function() {
+                    // Get the selected session_id
+                    var session_id = $(this).val();
+                    fillEventOption(session_id);
+                   
                 });
-            });
-    
+
 });
+
+        function fillEventOption(session_id){
+             // Make an AJAX request to fetch events based on the selected session_id
+             $.ajax({
+                        url: "{{url('/getEventsBySessionId/')}}/" + session_id,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            // Clear existing options in the event_id select
+                            $('#event_id').empty();
+
+                            // Add options based on the retrieved events
+                            $.each(response.events, function(index, event) {
+                                $('#event_id').append('<option value="' + event.id + '">' + event.name + '</option>');
+                                // Assuming each event has an "id" and "name" field, adjust accordingly
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error fetching events:', error);
+                        }
+                    });
+        }
+    
+
 
 
 

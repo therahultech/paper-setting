@@ -68,7 +68,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('uploads') => storage_path('app/public/uploads'),
+        // public_path('storage/uploads') => storage_path('app/public/uploads'),
+        // public_path('storage/syllabus') => storage_path('app/public/syllabus'),
         
     ],
 

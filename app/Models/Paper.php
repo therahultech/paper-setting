@@ -26,6 +26,7 @@ class Paper extends Model
         'year_id',
         'subject_id',
         'exam_paper_id',
+        'uploaded_file',
         'status',
         'created_by',
         'updated_by'

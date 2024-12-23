@@ -28,37 +28,6 @@
                 padding: 10px; /* Example padding */
                 text-align: center; /* Example alignment */
                 }
-
-
-                /* @media screen and (max-width: 768px) {
-                    .flex-center {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 10px;
-                    }
-                    .flex-center > div {
-                        flex: 1;
-                    }
-                    .flex-center > div:first-child {
-                        flex: 0 0 auto;
-                    }
-                    .description {
-                        padding: 20px;
-                    }
-                    .description img {
-                        width: 100%;
-                    }
-                    .notification-panel,
-                    .news-panel {
-                        padding: 20px;
-                    }
-                    .footer_custom {
-                        position: static;
-                        padding: 10px;
-                        text-align: center;
-                    }
-                } */
         </style>
     </head>
     <body class="antialiased">
@@ -67,42 +36,31 @@
             
 
             @if (Route::has('login'))
-                <div class="fixed top-0 right-0 px-6 py-4 sm:block">
+                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                    
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-gray-900 light:text-gray-500 ">Dashboard</a>
-                        <a href="{{ url('/course') }}" class="text-gray-900 light:text-gray-500 ">Courses</a>
+                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 light:text-gray-500 underline">Dashboard</a>
+                        <a href="{{ url('/course') }}" class="text-sm text-gray-700 light:text-gray-500 underline">Courses</a>
                         
                     @else
-                        <a href="{{ route('login') }}" class="text-gray-900 light:text-white ">Log in</a>
+                        <a href="{{ route('login') }}" class="text-sm text-gray-700 light:text-white underline">Log in</a>
                     @endauth
                 </div>
             @endif
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <!-- <div class="flex items-top justify-center pt-8 sm:justify-start sm:pt-1">
-                    <img src="{{ asset('images/logo.png') }}" alt="GJUST LOGO" srcset="" width="100" height="100">  
-                </div>
                 <div class="flex items-top justify-center pt-8 sm:justify-start sm:pt-1">
+                    <img src="{{ asset('images/logo.png') }}" alt="GJUST LOGO" srcset="" width="100" height="100">
                     <h1 class="sm:justify-start sm:pt-1" style='margin-left:20px;'>Guru Jambheshear University of Science & Technology</h1>    
-                </div> -->
-
-                <div class="mt-8 bg-white light:bg-gray-800 overflow-hidden sm:rounded-lg">
-                    <div class="mt-4 grid grid-cols-5 md:grid-cols-5 sm:grid-cols-1">
-                        <div class="col-span-1 text-center">
-                            <img class="" src="{{ asset('images/logo.png') }}" alt="GJUST LOGO" srcset="" width="100" height="100">  
-                        </div>
-                        
-                        <div class="col-span-4">
-                            <h1 class="text-center">Guru Jambheshear University of Science & Technology</h1>  
-                        </div>
-                        
-                    </div>
-                    
                 </div>
+
+                <!-- <div class="mt-8 bg-white light:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-1">
+                        <p>The divine guiding light: Saint Guru Jambheshwar : Guru Jambheshwar Ji was a saint who envisioned in fifteenth century the need of saving nature and initiated the sect to preach and follow the path of harmonious growth with the nature. His Twenty-Nine Commandments became the Bible for human growth and conservation of biodiversity. His commandments included directions for healthy social behaviour, personal hygiene and maintaining good basic health, and worshipping God. His teaching included compassion towards nature and protection of life as the...</p>                    
+                    </div>
+                </div> -->
                 
                 
-       
                 <!--  -->
                 <div class="mt-8 bg-white light:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                     <div class="grid grid-cols-1 md:grid-cols-2">
@@ -112,7 +70,7 @@
                                 <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 light:text-white">Documentation</a></div>
                             </div> -->
 
-                            <div class="ml-2">
+                            <div class="ml-12">
                                 <div class="mt-2 text-gray-600 light:text-gray-400 text-sm">
                                    Welcome to the Paper Setting Web Application,<br> It is developed to automate and simplify the Paper Setting Process for Examination and save papers for the Green Environment
                                 </div>
@@ -125,13 +83,12 @@
                                 <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 light:text-white">Laracasts</a></div>
                             </div> -->
 
-                            <div class="ml-2">
+                            <div class="ml-12">
                                 <div class="mt-2 items-center text-gray-600 light:text-gray-400 text-sm justify-center">
                                 <img
                                     src="{{ asset('images/gju_gate_image.jpg') }}"
                                     class="max-w-sm rounded border bg-white p-1 dark:border-neutral-700 dark:bg-neutral-800 items-center justify-center"
-                                    style="width:100%;height:auto;"
-                                    alt="GJUST LOGO" />
+                                    alt="GJUST LOGO" width="400" height="auto"  />
                                 </div>
                             </div>
                         </div>
@@ -164,11 +121,11 @@
                     </div>
                 </div>
 
-                <br><br><br><br>
+
 
                 <!--  -->
 
-                <div class="footer_custom flex justify-center mt-4 sm:items-center ">
+                <div class="footer_custom flex justify-center mt-4 sm:items-center sm:justify-between">
                     <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Developed by Sh. Rahul Kumar in Coordination with Dr. Jai Bhagwan, IT Cell, GJUS&T
                     </div>

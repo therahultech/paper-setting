@@ -11,7 +11,7 @@
 
     <style>
 
-        #set1_used_event_id div {
+        #used_for_event_id div {
             z-index: 99999;
         }
     </style>
@@ -26,8 +26,6 @@
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-
-       
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -93,33 +91,6 @@
                                 class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                                 >Download Set1</a>
 
-                                        @if($paper_Allocation->paper_upload->final_submit && !$paper_Allocation->set1_used_event_id)
-                                            <form action="{{ url('paper_Allocation/'.$paper_Allocation->id) }}" method="POST" onsubmit="return validateUse1()">
-                                                @csrf
-                                                @method('PUT')
-                                                <!--set1_used_event_id input-->
-                                                    <select data-te-select-init data-te-select-filter="true"
-                                                    class="@error('set1_used_event_id') is-invalid @enderror peer inline-block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                                    id="set1_used_event_id"
-                                                    name="set1_used_event_id"
-                                                    >
-                                                    <option value="" hidden selected></option>
-                                                    @foreach($events as $event)
-                                                        <option value="{{$event->id}}">{{$event->name}}</option>
-
-                                                    @endforeach
-                                                    </select>
-                                                    <button
-                                                    class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                    data-te-ripple-init
-                                                    data-te-ripple-color="light"
-                                                    
-                                                    type="submit" class="inline-block">Use In</button>
-                                            </form>
-                                            @else
-                                            | Used
-                                            @endif
-
                                         @else
                                         Uploaded
                                         @endif
@@ -140,35 +111,6 @@
                                 class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                                 >Download Set2</a>
 
-                                            @if($paper_Allocation->paper_upload->final_submit && !$paper_Allocation->set2_used_event_id)
-                                            <form action="{{ url('paper_Allocation/'.$paper_Allocation->id) }}" method="POST" onsubmit="return validateUse2()">
-                                                @csrf
-                                                @method('PUT')
-                                                <!--set2_used_event_id input-->
-                                                    <select data-te-select-init data-te-select-filter="true"
-                                                    class="@error('set2_used_event_id') is-invalid @enderror peer inline-block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                                    id="set2_used_event_id"
-                                                    name="set2_used_event_id"
-                                                    >
-                                                    <option value="" hidden selected></option>
-                                                    @foreach($events as $event)
-                                                        <option value="{{$event->id}}">{{$event->name}}</option>
-
-                                                    @endforeach
-                                                    </select>
-                                                    <button
-                                                    class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                    data-te-ripple-init
-                                                    data-te-ripple-color="light"
-                                                    
-                                                    type="submit" class="inline-block">Use In</button>
-                                            </form>
-                                            @else
-                                            | Used
-                                            @endif
-
-
-
                                         @else
                                         Uploaded
                                         @endif
@@ -184,7 +126,30 @@
 
                                 @if($paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set1_uploaded || $paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set2_uploaded)
 
-                                    
+                                    @if($paper_Allocation->paper_upload->final_submit)
+                                    <form action="{{ url('paper_Allocation/'.$paper_Allocation->id) }}" method="POST" onsubmit="return validateUse()">
+                                        @csrf
+                                        @method('PUT')
+                                        <!--used_for_event_id input-->
+                                            <select data-te-select-init data-te-select-filter="true"
+                                            class="@error('used_for_event_id') is-invalid @enderror peer inline-block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                            id="used_for_event_id"
+                                            name="used_for_event_id"
+                                            >
+                                            <option value="" hidden selected></option>
+                                            @foreach($events as $event)
+                                                <option value="{{$event->id}}">{{$event->name}}</option>
+
+                                            @endforeach
+                                            </select>
+                                            <button
+                                            class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                                            data-te-ripple-init
+                                            data-te-ripple-color="light"
+                                            
+                                            type="submit" class="inline-block">Use In</button>
+                                    </form>
+                                    @endif
                                 @else
                                     @can('paper_Allocation-edit')
                                     <a href="{{ url('paper_Allocation/'.$paper_Allocation->id.'/edit') }}" class="inline-block float-left"><i class="fa-solid fa-pen-to-square px-4"></i></a> 
@@ -238,32 +203,13 @@
             
         }
 
-        function validateUse1() {
+        function validateUse() {
 
-            if(!$('#set1_used_event_id').val()){
-                alert("Kindly select Event");
-                return false;
-            }
-            var set1SelectedValue = $('#set1_used_event_id').val();
-            // var set1SelectedName = $('#set1_used_event_id').attr('name');    
-            var result = confirm("Do you want to use Set1 for selected Event, As it can't be reversed.");
-            if (result) {
-            return true;
-            }
-            else {
-            return false;
-            }
-            
-        }
-        function validateUse2() {
-
-            if(!$('#set2_used_event_id').val()){
-                alert("Kindly select Event");
-                return false;
-            }
-            var set2SelectedValue = $('#set2_used_event_id').val();
-            // var set2SelectedName = $('#set2_used_event_id').attr('name');    
-            var result = confirm("Do you want to use Set2 for selected Even1, As it can't be reversed.");
+            // var selectedValue = $(this).val();
+            // var selectedName = $(this).attr('name');
+            // console.log("Selected value:", selectedValue);
+            // console.log("Selected name:", selectedName);        
+            var result = confirm("Do you want to Delete?");
             if (result) {
             return true;
             }

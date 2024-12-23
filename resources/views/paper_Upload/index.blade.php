@@ -41,6 +41,7 @@
                                 <th scope="col" class="px-6 py-4">Semster/Year</th>
                                 <th scope="col" class="px-6 py-4">Subject</th>
                                 <th scope="col" class="px-6 py-4">Paper ID</th>
+                                <th scope="col" class="px-6 py-4">File<br>(Syllabus)</th>
                                 @if($current_user->hasRole('Super_Admin'))
                                 <th scope="col" class="px-6 py-4">Teacher</th>
                                 <th scope="col" class="px-6 py-4">Teacher's Dept</th>
@@ -62,6 +63,19 @@
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->semester->id?'Sem-'.$paper_Allocation->paper->semester->name:'Year'.$paper_Allocation->year->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->subject->code.'-'.$paper_Allocation->paper->subject->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->exam_paper_id}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">
+
+                                @if($paper_Allocation->paper->uploaded_file)
+                                        <a 
+                                href="{{ asset($paper_Allocation->paper->uploaded_file)}}" 
+                                target="_blank"
+                                class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                >Download</a>
+                                @else
+                                NA
+                                @endif
+
+                                </td>
                                 @if($current_user->hasRole('Super_Admin'))
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->name_prefix.' '.$paper_Allocation->teacher->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->department->code.' '.$paper_Allocation->teacher->department->name}}</td>

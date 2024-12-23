@@ -12,6 +12,7 @@ use App\Models\Semester;
 use App\Models\Year;
 use App\Models\Subject;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class PaperController extends Controller
 {
@@ -85,6 +86,13 @@ class PaperController extends Controller
         ]
     );
 
+        if($request->hasFile('uploaded_file')){
+            $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
+            $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
+            $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+            $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        }
+
         $paper = new Paper;
         $paper->course_id = $request->input('course_id');
         $paper->session_id = $request->input('session_id');
@@ -93,6 +101,9 @@ class PaperController extends Controller
         $paper->year_id = $request->input('year_id');
         $paper->subject_id = $request->input('subject_id');
         $paper->exam_paper_id = $request->input('exam_paper_id');
+        if($request->hasFile('uploaded_file') && $uploaded_fileUrl){
+            $paper->uploaded_file = $uploaded_fileUrl;
+        }
         $paper->status = $request->input('status');
         $paper->created_by = $request->user()->id;
         $paper->save();
@@ -149,6 +160,13 @@ class PaperController extends Controller
             'exam_paper_id'=>'required|max:10',
         ]);
 
+        if($request->hasFile('uploaded_file')){
+            $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
+            $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
+            $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+            $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        }
+
         $paper->course_id = $request->input('course_id');
         $paper->session_id = $request->input('session_id');
         $paper->event_id = $request->input('event_id');
@@ -156,6 +174,9 @@ class PaperController extends Controller
         $paper->year_id = $request->input('year_id');
         $paper->subject_id = $request->input('subject_id');
         $paper->exam_paper_id = $request->input('exam_paper_id');
+        if($request->hasFile('uploaded_file') && $uploaded_fileUrl){
+            $paper->uploaded_file = $uploaded_fileUrl;
+        }
         $paper->status = $request->input('status');
         $paper->updated_by = $request->user()->id;
         $paper->update();
@@ -174,6 +195,11 @@ class PaperController extends Controller
         //
         $paper->delete();
         return redirect('paper')->with('status','Paper Deleted Successfully');
+    }
+
+    private function generateFileName($paper_allocation_id,$set, $userId)
+    {
+        return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
     }
 
 }

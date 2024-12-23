@@ -27,6 +27,22 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
+                @if(session('success'))
+                    <div
+                    class="mb-4 rounded-lg bg-success px-6 py-5 text-base text-white-600"
+                    role="alert">
+                    {{session('success')}}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div
+                    class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-primary-600"
+                    role="alert">
+                    {{session('error')}}
+                    </div>
+                @endif
+
+
                 <div class="p-6 col-span-12 md:col-span-12 xl:col-span-12 ">
                                 <a
                                     type="button"
@@ -198,6 +214,22 @@
                                 >
                                 Final Submit
                                 </button>
+                                @else
+
+                                <br><br>
+                                <button
+                                type="button"
+                                class="inline-block w-full rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                                data-te-ripple-init
+                                data-te-ripple-color="light"
+                                id="view_bill"
+                                name="view_bill"
+                                value="1"
+                                onclick="viewBill({{$paper_Allocations_with_upload[0]->id}})" 
+                                >
+                                View Remuneration Bill
+                                </button>
+
                                 @endif
 
                                 <!-- end -->
@@ -232,6 +264,13 @@
             return false;
             }
             
+        }
+
+        function viewBill(id) {
+            // Use Blade to pass the base URL to JavaScript
+            const baseUrl = "{{ url('paper_Upload/viewBill') }}"; 
+            const url = `${baseUrl}/${id}`; // Append the id dynamically
+            window.location.href = url; // Redirect to the generated URL
         }
 
 </script>

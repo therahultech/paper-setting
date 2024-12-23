@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePaper_AllocationRequest;
 use App\Models\Paper;
 use App\Models\Teacher;
 use App\Http\Controller\PhpMailController;
+use App\Models\Event;
 
 class PaperAllocationController extends Controller
 {
@@ -28,9 +29,10 @@ class PaperAllocationController extends Controller
     {
         //
         $paper_Allocations = Paper_Allocation::with('teacher','teacher.department','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload')->get();
+        $events = Event::where('status','=','1')->get();
         // echo '<pre>';
         // echo $paper_Allocationxs;
-        return view('paper_Allocation.index',compact('paper_Allocations'));
+        return view('paper_Allocation.index',compact('paper_Allocations','events'));
     }
 
     /**
@@ -64,12 +66,12 @@ class PaperAllocationController extends Controller
      
         ]);
 
-        // $paper_Allocation = new Paper_Allocation;
-        // $paper_Allocation->paper_id = $request->input('paper_id');
-        // $paper_Allocation->teacher_id = $request->input('teacher_id');
-        // $paper_Allocation->status = $request->input('status');
-        // $paper_Allocation->created_by = $request->user()->id;
-        // $paper_Allocation->save();
+        $paper_Allocation = new Paper_Allocation;
+        $paper_Allocation->paper_id = $request->input('paper_id');
+        $paper_Allocation->teacher_id = $request->input('teacher_id');
+        $paper_Allocation->status = $request->input('status');
+        $paper_Allocation->created_by = $request->user()->id;
+        $paper_Allocation->save();
 
         // return $paper_Allocation;
         $teacher = Teacher::find($request->input('teacher_id'));
@@ -87,9 +89,9 @@ class PaperAllocationController extends Controller
         $data_for_email['semYear']=$paper->semester_id?$paper->semester_id:$paper->year_id;
         $data_for_email['paper']=$paper->subject->code.'-'.$paper->subject->name.' ('.$paper->exam_paper_id.')';
 
-        echo '<br>email_to:'.$email_to;
-        echo '<br>email_sub:'.$email_subject;
-        echo '<br><pre>:';
+        // echo '<br>email_to:'.$email_to;
+        // echo '<br>email_sub:'.$email_subject;
+        // echo '<br><pre>:';
         // dd($data_for_email);
 
         // $email_response = PhpMailController::send_paper_allot_email($email_to,$email_subject,$data_for_email);
@@ -137,17 +139,38 @@ class PaperAllocationController extends Controller
     public function update(UpdatePaper_AllocationRequest $request, Paper_Allocation $paper_Allocation)
     {
         //
-        $validated = $request->validate([
-            'paper_id'=>'required',
-            'teacher_id'=>'required',
-     
-        ]);
+        if($request->input('set1_used_event_id')){
+            echo 'val:'.$request->input('set1_used_event_id');
+        }
+        // dd($request);
+        if($request->input('set1_used_event_id')){
+            $paper_Allocation->is_set1_used = 1;
+            $paper_Allocation->set1_used_event_id = $request->input('set1_used_event_id');
+            $paper_Allocation->set1_used_date_time = date('Y-m-d H:i:s');
+            $paper_Allocation->updated_by = $request->user()->id;
+            $paper_Allocation->update();
+        }else if($request->input('set2_used_event_id')){
+            $paper_Allocation->is_set2_used = 1;
+            $paper_Allocation->set2_used_event_id = $request->input('set2_used_event_id');
+            $paper_Allocation->set2_used_date_time = date('Y-m-d H:i:s');
+            $paper_Allocation->updated_by = $request->user()->id;
+            $paper_Allocation->update();
+        }else{
+            $validated = $request->validate([
+                'paper_id'=>'required',
+                'teacher_id'=>'required',
+         
+            ]);
+            $paper_Allocation->paper_id = $request->input('paper_id');
+            $paper_Allocation->teacher_id = $request->input('teacher_id');
+            $paper_Allocation->status = $request->input('status');
+            $paper_Allocation->updated_by = $request->user()->id;
+            $paper_Allocation->update();
+        }
+       
 
-        $paper_Allocation->paper_id = $request->input('paper_id');
-        $paper_Allocation->teacher_id = $request->input('teacher_id');
-        $paper_Allocation->status = $request->input('status');
-        $paper_Allocation->updated_by = $request->user()->id;
-        $paper_Allocation->update();
+        
+       
 
         return redirect('paper_Allocation')->with('status','Paper Allocation Updated Successfully');
     }
