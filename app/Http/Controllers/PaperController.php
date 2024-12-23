@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Paper;
 use App\Http\Requests\StorePaperRequest;
 use App\Http\Requests\UpdatePaperRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\Session;
 use App\Models\Event;
 use App\Models\Semester;
 use App\Models\Year;
 use App\Models\Subject;
+use App\Models\RemunerationBill;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class PaperController extends Controller
 {
@@ -201,5 +204,156 @@ class PaperController extends Controller
     {
         return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
     }
+
+
+    public function viewAllBill()
+    {
+        $current_user = Auth::user();
+
+        $current_user_id = $current_user->id;
+        
+        if($current_user->hasRole('Super_Admin')){
+            $remunerationBill = RemunerationBill::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload','paper_allocation')
+            ->where('remuneration_bills.submitted_to_secy','=',1)
+            ->where('remuneration_bills.status','=',1)
+            ->get();
+
+        }else if($current_user->hasRole('Secrecy')){
+            $remunerationBill = RemunerationBill::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload','paper_allocation')
+            ->where('remuneration_bills.submitted_to_secy','=',1)
+            ->where('remuneration_bills.status','=',1)
+            ->get();
+        }else{
+            echo 'Auth Failed for this page.';
+
+        }
+
+        // dd($remunerationBill);
+        // dd($remunerationBill->toSql(), $remunerationBill->getBindings());
+
+        return view('paper.view_all_bill',compact('remunerationBill'));
+    }
+
+
+
+    public function viewBill($id)
+    {
+        $current_user = Auth::user();
+        // dd($current_user);
+        $current_user_id = $current_user->id;
+        
+        if($current_user->hasRole('Super_Admin')){
+            $remunerationBill = RemunerationBill::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload','paper_allocation')
+            ->where('remuneration_bills.submitted_to_secy','=',1)
+            ->where('remuneration_bills.status','=',1)
+            ->where('remuneration_bills.id','=',$id)
+            ->first();
+
+        }else if($current_user->hasRole('Secrecy')){
+            $remunerationBill = RemunerationBill::with('teacher','teacher.department','teacher.user','paper','paper.course','paper.session','paper.event','paper.semester','paper.year','paper.subject','paper_upload','paper_allocation')
+            ->where('remuneration_bills.submitted_to_secy','=',1)
+            ->where('remuneration_bills.status','=',1)
+            ->where('remuneration_bills.id','=',$id)
+            ->first();
+
+        }else{
+            echo 'Auth Failed for this page.';
+
+        }
+
+
+
+        return view('paper.view_bill',compact('remunerationBill'));
+    }
+
+
+    public function billSubmitToAcc(Request $request)
+    {
+        // Ensure the referer is valid
+        $referer = $request->headers->get('referer');
+        $allowedDomain = url('/paper/viewBill'); 
+
+        if (!str_starts_with($referer, $allowedDomain)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Get the current authenticated user
+        $current_user = Auth::user();
+        $current_user_id = $current_user->id;
+
+        // Fetch the remuneration bill based on user roles
+        if ($current_user->hasRole('Super_Admin') || $current_user->hasRole('Secrecy')) {
+            $remunerationBill = RemunerationBill::find($request->input('id'));
+        } else {
+            return redirect()->back()->with('error', 'Authentication failed for this page.');
+        }
+
+        if (!$remunerationBill) {
+            return redirect()->back()->with('error', 'Remuneration Bill not found.');
+        }
+
+        // Update remarks if provided
+        if ($request->input('secy_remarks')) {
+            $remunerationBill->secy_remarks = $request->input('secy_remarks');
+        }
+
+        // Update bill status
+        $remunerationBill->submitted_to_acc = 1;
+        $remunerationBill->submitted_to_acc_datetime = now();
+
+        // Save the record and set the response message
+        $response_status_msg = $remunerationBill->save()
+            ? "Submitted to Account Branch successfully."
+            : "Failed to submit to Account Branch.";
+
+        // Redirect back to the specified page with a status message
+        if($response_status_msg=='Failed to submit to Account Branch.'){
+            return redirect()->back()->with('error', $response_status_msg);
+        }
+        return redirect()->back()->with('status', $response_status_msg);
+    }
+
+
+    public function billUpdateOtherDeduct(Request $request)
+    {
+        // Ensure the referer is valid
+        $referer = $request->headers->get('referer');
+        $allowedDomain = url('/paper/viewBill'); 
+
+        if (!str_starts_with($referer, $allowedDomain)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Get the current authenticated user
+        $current_user = Auth::user();
+        $current_user_id = $current_user->id;
+
+        // Fetch the remuneration bill based on user roles
+        if ($current_user->hasRole('Super_Admin') || $current_user->hasRole('Secrecy')) {
+            $remunerationBill = RemunerationBill::find($request->input('id'));
+        } else {
+            return redirect()->back()->with('error', 'Authentication failed for this page.');
+        }
+
+        if (!$remunerationBill) {
+            return redirect()->back()->with('error', 'Remuneration Bill not found.');
+        }
+
+        // Update remarks if provided
+        if ($request->input('other_deduct') || $request->input('other_deduct')==0) {
+            $remunerationBill->other_deduct = $request->input('other_deduct');
+            $remunerationBill->net_pay_amount = $remunerationBill->total_rem_amt - ($remunerationBill->rem_deduct + $remunerationBill->other_deduct);
+        }
+
+       // Save the record and set the response message
+        if($remunerationBill->save()){
+            return redirect()->back()->with('status', 'Other Deduction Updated');
+        }else{
+            return redirect()->back()->with('error', 'Failed to update other deduction.');
+        }
+
+        
+    }
+
 
 }

@@ -31,7 +31,18 @@
                         </div>
                     @endif
                     
+                    <div class="p-6 bg-white float-left">
+                        <a
+                            type="button"
+                            href="{{url('paper/viewAllBill')}}"
+                            data-te-ripple-init
+                            data-te-ripple-color="light"
+                            class=" bg-primary rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-100 hover:text-white-600 focus:text-white-600 focus:outline-none focus:ring-0 active:text-white-700 dark:hover:bg-primary-700">
+                            <i class="fa-solid fa-eye"></i>&nbsp; View Bills
+                        </a>
+                    </div>
                     <div class="p-6 bg-white float-right">
+                    
                         <a
                             type="button"
                             href="{{url('paper/create')}}"

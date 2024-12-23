@@ -42,6 +42,14 @@ Route::post('send-php-mailer-submit',[PhpMailController::class, 'store'])->name(
 
 
 Route::group(['middleware' => 'auth'], function() {
+    Route::get('paper_Upload/create/{paper_allocation_id}',[PaperUploadController::class, 'create']);
+    Route::get('paper_Upload/viewBill/{paper_upload_id}',[PaperUploadController::class, 'viewBill']);
+    Route::post('paper_Upload/billSubmitToSecy',[PaperUploadController::class, 'billSubmitToSecy']);
+    Route::get('paper/viewAllBill', [PaperController::class, 'viewAllBill']);
+    Route::get('paper/viewBill/{id}',[PaperController::class, 'viewBill']);
+    Route::post('paper/billUpdateOtherDeduct',[PaperController::class, 'billUpdateOtherDeduct']);
+    Route::post('paper/billSubmitToAcc',[PaperController::class, 'billSubmitToAcc']);
+
     Route::resource('course',CourseController::class);
     Route::resource('department',DepartmentController::class);
     Route::resource('subject',SubjectController::class);
@@ -49,15 +57,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('teacher',TeacherController::class);
     Route::resource('session',SessionController::class);
     Route::resource('event',EventController::class);
-    Route::resource('session',SessionController::class);
     Route::resource('paper_Allocation',PaperAllocationController::class);
     Route::resource('paper_Upload',PaperUploadController::class)->except(['create']);
     // Route::post('paper_Upload/create',[PaperUploadController::class, 'create']);
-    Route::get('paper_Upload/create/{paper_allocation_id}',[PaperUploadController::class, 'create']);
-    Route::get('paper_Upload/viewBill/{paper_upload_id}',[PaperUploadController::class, 'viewBill']);
-    Route::post('paper_Upload/billSubmitToSecy',[PaperUploadController::class, 'billSubmitToSecy']);
-
+    
   });
+
 
 Route::get('/getEventsBySessionId/{session_id}', [EventController::class, 'getEventsBySessionId']);
   

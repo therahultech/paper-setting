@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('View Bill') }}
+            {{ __('Secrecy->View Bill') }}
         </h2>
     </x-slot>
 
@@ -27,11 +27,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                @if(session('success'))
+                @if(session('status'))
                     <div
                     class="mb-4 rounded-lg bg-success px-6 py-5 text-base text-white-600"
                     role="alert">
-                    {{session('success')}}
+                    {{session('status')}}
                     </div>
                 @endif
                 @if(session('error'))
@@ -149,18 +149,78 @@
                         Print
                     </button>
                 </div>
-                @if(!$remunerationBill->submitted_to_secy)
-                <form method="post" action="{{ url('paper_Upload/billSubmitToSecy') }}" >
+
+                @if(!$remunerationBill->submitted_to_acc)
+                <form method="post" action="{{ url('paper/billUpdateOtherDeduct') }}">
                     @csrf
                     <input type="hidden" name="id" value="{{$remunerationBill->id}}">
-                    <div class="text-center mt-8 no-print">
-                        <button onclick="validateSecySubmit()" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Submit to Secrecy Branch
-                        </button>
+
+                    <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                        <!-- Input Field -->
+                        <div class="w-full sm:w-auto">
+                            <label for="other_deduct" class="block text-gray-700 font-medium mb-1">Other Deduction (if any)</label>
+                            <input
+                                type="number"
+                                class="peer block w-full sm:w-auto sm:max-w-xs rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:text-neutral-200 dark:bg-gray-700"
+                                id="other_deduct"
+                                name="other_deduct"
+                                placeholder="Enter deduction amount"
+                                value="{{$remunerationBill->other_deduct}}"
+                            />
+                            @error('other_deduct')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Button -->
+                        <div>
+                            <button
+                                onclick="billUpdateOtherDeduct()"
+                                type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm"
+                            >
+                                Update Other Deduction
+                            </button>
+                        </div>
                     </div>
                 </form>
                 @endif
 
+                @if(!$remunerationBill->submitted_to_acc)
+                <form method="post" action="{{ url('paper/billSubmitToAcc') }}">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$remunerationBill->id}}">
+
+                    <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                        <!-- Input Field -->
+                        <div class="w-full sm:w-auto">
+                            <label for="secy_remarks" class="block text-gray-700 font-medium mb-1">Remarks By Secrecy Branch (if any)</label>
+                            <input
+                                type="text"
+                                class="peer block w-full sm:w-auto sm:max-w-xs rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:text-neutral-200 dark:bg-gray-700"
+                                id="secy_remarks"
+                                name="secy_remarks"
+                                placeholder="Remarks By Secrecy Branch"
+                                value="{{$remunerationBill->secy_remarks}}"
+                            />
+                            @error('secy_remarks')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Button -->
+                        <div>
+                            <button
+                                onclick="validateAccSubmit()"
+                                type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm"
+                            >
+                            Submit to Account Branch
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                @endif
 
 
                     <script>
@@ -219,9 +279,21 @@
             } );
         } );
 
-        function validateSecySubmit() {
+        function validateAccSubmit() {
             
-            var result = confirm("Are you sure you want to submit this bill to Secrecy Branch.");
+            var result = confirm("Are you sure you want to submit this bill to Account Branch.");
+            if (result) {
+            return true;
+            }
+            else {
+            return false;
+            }
+            
+        }
+        
+        function billUpdateOtherDeduct() {
+            
+            var result = confirm("Are you sure you want to update other deduction to this bill.");
             if (result) {
             return true;
             }
@@ -231,11 +303,6 @@
             
         }
 
-        function viewBill(id) {
-            // Use Blade to pass the base URL to JavaScript
-            const baseUrl = "{{ url('paper_Upload/viewBill') }}"; 
-            const url = `${baseUrl}/${id}`; // Append the id dynamically
-            window.location.href = url; // Redirect to the generated URL
-        }
+
 
 </script>
