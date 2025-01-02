@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Paper_Allocation;
 use App\Http\Requests\StorePaper_AllocationRequest;
 use App\Http\Requests\UpdatePaper_AllocationRequest;
+use App\Http\Requests\PaperDownloadRequest;
 use App\Models\Paper;
 use App\Models\Teacher;
 use App\Http\Controller\PhpMailController;
@@ -15,10 +16,11 @@ class PaperAllocationController extends Controller
 
     function __construct()
     {
-         $this->middleware('permission:paper_Allocation-list|paper_Allocation-create|paper_Allocation-edit|paper_Allocation-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:paper_Allocation-list|paper_Allocation-create|paper_Allocation-edit|paper_Allocation-delete|paper_download', ['only' => ['index','store']]);
          $this->middleware('permission:paper_Allocation-create', ['only' => ['create','store']]);
          $this->middleware('permission:paper_Allocation-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:paper_Allocation-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:paper_download', ['only' => ['paper_download']]);
     }
     /**
      * Display a listing of the resource.
@@ -33,6 +35,11 @@ class PaperAllocationController extends Controller
         // echo '<pre>';
         // echo $paper_Allocationxs;
         return view('paper_Allocation.index',compact('paper_Allocations','events'));
+    }
+
+    public function paper_download(PaperDownloadRequest $request)
+    {
+        
     }
 
     /**

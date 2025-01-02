@@ -38,10 +38,19 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('paper_Allocation.index')" :active="request()->routeIs('paper_Allocation.*')">
+                        {{ __('Paper Allocation') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('teacher.index')" :active="request()->routeIs('teacher.*')">
                         {{ __('Teacher') }}
                     </x-nav-link>
                 </div>
+                
+                @endif
+
+                @if(Auth::user()->hasAnyRole(['CPA']))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('paper_Allocation.index')" :active="request()->routeIs('paper_Allocation.*')">
                         {{ __('Paper Allocation') }}

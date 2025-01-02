@@ -87,13 +87,18 @@
                                     @if($paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set1_uploaded)
 
                                         @if($paper_Allocation->paper_upload->final_submit)
+                                        @can('paper_download')
                                         <a 
                                 href="{{ asset($paper_Allocation->paper_upload->set1_file)}}" 
                                 target="_blank"
                                 class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                                 >Download Set1</a>
+                                        @else
+                                        Yes
+                                        @endcan
 
                                         @if($paper_Allocation->paper_upload->final_submit && !$paper_Allocation->set1_used_event_id)
+                                            @can('paper_download')
                                             <form action="{{ url('paper_Allocation/'.$paper_Allocation->id) }}" method="POST" onsubmit="return validateUse1()">
                                                 @csrf
                                                 @method('PUT')
@@ -116,9 +121,10 @@
                                                     
                                                     type="submit" class="inline-block">Use In</button>
                                             </form>
-                                            @else
+                                            @endcan
+                                        @else
                                             | Used
-                                            @endif
+                                        @endif
 
                                         @else
                                         Uploaded
@@ -134,13 +140,18 @@
                                     @if($paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set2_uploaded)
 
                                         @if($paper_Allocation->paper_upload->final_submit)
+                                        @can('paper_download')
                                         <a 
                                 href="{{ asset($paper_Allocation->paper_upload->set2_file)}}" 
                                 target="_blank"
                                 class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                                 >Download Set2</a>
+                                        @else
+                                        Yes
+                                        @endcan
 
                                             @if($paper_Allocation->paper_upload->final_submit && !$paper_Allocation->set2_used_event_id)
+                                            @can('paper_download')
                                             <form action="{{ url('paper_Allocation/'.$paper_Allocation->id) }}" method="POST" onsubmit="return validateUse2()">
                                                 @csrf
                                                 @method('PUT')
@@ -163,6 +174,7 @@
                                                     
                                                     type="submit" class="inline-block">Use In</button>
                                             </form>
+                                            @endcan
                                             @else
                                             | Used
                                             @endif

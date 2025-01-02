@@ -12,6 +12,7 @@ use App\Http\Controllers\PaperAllocationController;
 use App\Http\Controllers\PaperUploadController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PhpMailController;
+use App\Http\Controllers\PasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +65,12 @@ Route::group(['middleware' => 'auth'], function() {
   });
 
 
-Route::get('/getEventsBySessionId/{session_id}', [EventController::class, 'getEventsBySessionId']);
+
+
+  Route::get('/password', [PasswordController::class, 'index'])->name('password.index');
+  Route::post('/password/generate', [PasswordController::class, 'generate'])->name('password.generate');
+
+  Route::get('/getEventsBySessionId/{session_id}', [EventController::class, 'getEventsBySessionId']);
   
 
 // Route::resource('course',CourseController::class);
