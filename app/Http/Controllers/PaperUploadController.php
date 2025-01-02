@@ -143,112 +143,189 @@ class PaperUploadController extends Controller
      * @param  \App\Http\Requests\StorePaper_UploadRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePaper_UploadRequest $request)
-    {
-        //
-        // dd($request->all());
-        $paper_Upload;
-        $paper_Upload_id;
-        $response_status_msg = 'Paper Uploaded Successfully';
-        if($request->id){
-            $paper_Upload = Paper_Upload::find($request->id);
-        }else{
-            $paper_Upload = new Paper_Upload();
-            $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
-            $paper_Upload->created_by = $request->user()->id;
-            $paper_Upload->save(); 
-            $paper_Upload_id = $paper_Upload->getKey();
-            $paper_Upload = Paper_Upload::find($paper_Upload_id);
-        }
-        if(!($paper_Upload->set1_uploaded && $paper_Upload->set1_file)){
-            $validator = $request->validate([
-                'paper_allocation_id' => 'required',
-                'set1_file' => 'required|mimes:zip',
-                'set2_file' => 'nullable|mimes:zip',
+    // public function store(StorePaper_UploadRequest $request)
+    // {
+    //     //
+    //     // dd($request->all());
+    //     $paper_Upload;
+    //     $paper_Upload_id;
+    //     $response_status_msg = 'Paper Uploaded Successfully';
+    //     if($request->id){
+    //         $paper_Upload = Paper_Upload::find($request->id);
+    //     }else{
+    //         $paper_Upload = new Paper_Upload();
+    //         $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
+    //         $paper_Upload->created_by = $request->user()->id;
+    //         $paper_Upload->save(); 
+    //         $paper_Upload_id = $paper_Upload->getKey();
+    //         $paper_Upload = Paper_Upload::find($paper_Upload_id);
+    //     }
+    //     if(!($paper_Upload->set1_uploaded && $paper_Upload->set1_file)){
+    //         $validator = $request->validate([
+    //             'paper_allocation_id' => 'required',
+    //             'set1_file' => 'required|mimes:zip',
+    //             'set2_file' => 'nullable|mimes:zip',
          
-            ]);
-        }
+    //         ]);
+    //     }
 
-        // echo($paper_Upload_id);
-        // echo($paper_Upload);
+    //     // echo($paper_Upload_id);
+    //     // echo($paper_Upload);
         
-        // dd($paper_Upload);
+    //     // dd($paper_Upload);
 
-        if(($paper_Upload->set1_uploaded && $paper_Upload->set1_file && !$request->hasFile('set1_file') && !$request->hasFile('set2_file')) && !$request->input('final_submit')){
-            $validator = $request->validate([
-                'paper_allocation_id' => 'required',
-                // 'set1_file' => 'required|mimes:zip',
-                'set2_file' => 'required|mimes:zip',
+    //     if(($paper_Upload->set1_uploaded && $paper_Upload->set1_file && !$request->hasFile('set1_file') && !$request->hasFile('set2_file')) && !$request->input('final_submit')){
+    //         $validator = $request->validate([
+    //             'paper_allocation_id' => 'required',
+    //             // 'set1_file' => 'required|mimes:zip',
+    //             'set2_file' => 'required|mimes:zip',
          
-            ]);
-        }
+    //         ]);
+    //     }
 
   
 
-        if(($paper_Upload->set1_uploaded && $paper_Upload->set1_file) && ($paper_Upload->set2_uploaded && $paper_Upload->set2_file) && $request->input('final_submit')){
+    //     if(($paper_Upload->set1_uploaded && $paper_Upload->set1_file) && ($paper_Upload->set2_uploaded && $paper_Upload->set2_file) && $request->input('final_submit')){
 
+    //         $paper_Upload->update([
+    //             'final_submit' => $request->input('final_submit'),
+    //         ]);
+    //         $response_status_msg = 'Final Submission has been done for the Paper';
+            
+    //     }else{
+    //         if((!$paper_Upload->set1_uploaded && !$paper_Upload->set1_file) || ($paper_Upload->set1_uploaded && $paper_Upload->set1_file && $request->hasFile('set1_file'))){
+    //             $set1FileName = $this->generateFileName($request->paper_allocation_id,'set1', $request->user()->id);
+    //             $set1FilePath = $request->file('set1_file')->storeAs('public/uploads', $set1FileName);
+    //             $set1FileUrl = Storage::url($set1FilePath);
+    
+    //             // dd($set1FilePath);
+    
+    //             if($paper_Upload){
+    //                 // $paper_Upload = Paper_Upload::find($request->id);
+    //                 // $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
+    //                 $paper_Upload->set1_uploaded = $set1FilePath?1:0;
+    //                 $paper_Upload->set1_file = $set1FileUrl;
+    //                 $paper_Upload->update();
+    //             }else{
+    //                 $paper_Upload = new Paper_Upload();
+    //                 $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
+    //                 $paper_Upload->set1_uploaded = $set1FilePath?1:0;
+    //                 $paper_Upload->set1_file = $set1FileUrl;
+    //                 $paper_Upload->save();            
+    //             }
+    //         }
+                    
+    //         // dd($paper_Upload);
+        
+                
+    //         // $paperAllocation = Paper_Allocation::find($request->paper_allocation_id);
+    //         // $paperAllocation->paper_upload()->save($paper_Upload);
+        
+    //         if ($request->hasFile('set2_file')) {
+    //             $set2FileName = $this->generateFileName($request->paper_allocation_id,'set2', $request->user()->id);
+    //             $set2FilePath = $request->file('set2_file')->storeAs('public/uploads', $set2FileName);
+    //             $set2FileUrl = Storage::url($set2FilePath);
+        
+    //             $paper_Upload->update([
+    //                 'set2_uploaded' => 1,
+    //                 'set2_file' => $set2FileUrl,
+    //                 'final_submit' => $request->input('final_submit'),
+    //             ]);
+    //         }
+    
+    //     }
+        
+    
+       
+        
+    
+    //     return redirect('paper_Upload')->with('status',$response_status_msg);
+    // }
+
+
+
+
+    // private function generateFileName($paper_allocation_id,$set, $userId)
+    // {
+    //     return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
+    // }
+
+    private function generateFileName($paper_allocation_id, $set, $userId, $extension)
+    {
+        return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . ".{$extension}";
+    }
+
+
+    public function store(StorePaper_UploadRequest $request)
+    {
+        $paper_Upload;
+        $paper_Upload_id;
+        $response_status_msg = 'Paper Uploaded Successfully';
+
+        if ($request->id) {
+            $paper_Upload = Paper_Upload::find($request->id);
+        } else {
+            $paper_Upload = new Paper_Upload();
+            $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
+            $paper_Upload->created_by = $request->user()->id;
+            $paper_Upload->save();
+            $paper_Upload_id = $paper_Upload->getKey();
+            $paper_Upload = Paper_Upload::find($paper_Upload_id);
+        }
+
+        $allowedExtensions = 'pdf,doc,docx,zip'; // Define allowed file extensions
+
+        if (!($paper_Upload->set1_uploaded && $paper_Upload->set1_file)) {
+            $request->validate([
+                'paper_allocation_id' => 'required',
+                'set1_file' => 'required|file',
+                'set2_file' => 'nullable|file',
+            ]);
+        }
+
+        if (($paper_Upload->set1_uploaded && $paper_Upload->set1_file && !$request->hasFile('set1_file') && !$request->hasFile('set2_file')) && !$request->input('final_submit')) {
+            $request->validate([
+                'paper_allocation_id' => 'required',
+                'set2_file' => 'required|file',
+            ]);
+        }
+
+        if (($paper_Upload->set1_uploaded && $paper_Upload->set1_file) && ($paper_Upload->set2_uploaded && $paper_Upload->set2_file) && $request->input('final_submit')) {
             $paper_Upload->update([
                 'final_submit' => $request->input('final_submit'),
             ]);
             $response_status_msg = 'Final Submission has been done for the Paper';
-            
-        }else{
-            if((!$paper_Upload->set1_uploaded && !$paper_Upload->set1_file) || ($paper_Upload->set1_uploaded && $paper_Upload->set1_file && $request->hasFile('set1_file'))){
-                $set1FileName = $this->generateFileName($request->paper_allocation_id,'set1', $request->user()->id);
-                $set1FilePath = $request->file('set1_file')->storeAs('public/uploads', $set1FileName);
+        } else {
+            if ((!$paper_Upload->set1_uploaded && !$paper_Upload->set1_file) || ($paper_Upload->set1_uploaded && $paper_Upload->set1_file && $request->hasFile('set1_file'))) {
+                $file = $request->file('set1_file');
+                $extension = $file->getClientOriginalExtension();
+                $set1FileName = $this->generateFileName($request->paper_allocation_id, 'set1', $request->user()->id, $extension);
+                $set1FilePath = $file->storeAs('public/uploads', $set1FileName);
                 $set1FileUrl = Storage::url($set1FilePath);
-    
-                // dd($set1FilePath);
-    
-                if($paper_Upload){
-                    // $paper_Upload = Paper_Upload::find($request->id);
-                    // $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
-                    $paper_Upload->set1_uploaded = $set1FilePath?1:0;
-                    $paper_Upload->set1_file = $set1FileUrl;
-                    $paper_Upload->update();
-                }else{
-                    $paper_Upload = new Paper_Upload();
-                    $paper_Upload->paper_allocation_id = $request->input('paper_allocation_id');
-                    $paper_Upload->set1_uploaded = $set1FilePath?1:0;
-                    $paper_Upload->set1_file = $set1FileUrl;
-                    $paper_Upload->save();            
-                }
+
+                $paper_Upload->set1_uploaded = $set1FilePath ? 1 : 0;
+                $paper_Upload->set1_file = $set1FileUrl;
+                $paper_Upload->update();
             }
-                    
-            // dd($paper_Upload);
-        
-                
-            // $paperAllocation = Paper_Allocation::find($request->paper_allocation_id);
-            // $paperAllocation->paper_upload()->save($paper_Upload);
-        
+
             if ($request->hasFile('set2_file')) {
-                $set2FileName = $this->generateFileName($request->paper_allocation_id,'set2', $request->user()->id);
-                $set2FilePath = $request->file('set2_file')->storeAs('public/uploads', $set2FileName);
+                $file = $request->file('set2_file');
+                $extension = $file->getClientOriginalExtension();
+                $set2FileName = $this->generateFileName($request->paper_allocation_id, 'set2', $request->user()->id, $extension);
+                $set2FilePath = $file->storeAs('public/uploads', $set2FileName);
                 $set2FileUrl = Storage::url($set2FilePath);
-        
+
                 $paper_Upload->update([
                     'set2_uploaded' => 1,
                     'set2_file' => $set2FileUrl,
                     'final_submit' => $request->input('final_submit'),
                 ]);
             }
-    
         }
-        
-    
-       
-        
-    
-        return redirect('paper_Upload')->with('status',$response_status_msg);
+
+        return redirect('paper_Upload')->with('status', $response_status_msg);
     }
 
-
-
-
-    private function generateFileName($paper_allocation_id,$set, $userId)
-    {
-        return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
-    }
 
     /**
      * Display the specified resource.

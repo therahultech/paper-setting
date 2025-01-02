@@ -120,7 +120,7 @@
                                     id="set1_file"
                                     name="set1_file"
                                     type="file"
-                                    accept=".zip"
+                                    accept="*"
                                     />
 
                                 @error('set1_file')
@@ -161,7 +161,7 @@
                                     id="set2_file"
                                     name="set2_file"
                                     type="file" 
-                                    accept=".zip"
+                                    accept="*"
                                     />
                                 
                                 @error('set2_file')

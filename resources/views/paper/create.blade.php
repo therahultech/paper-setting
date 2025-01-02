@@ -240,7 +240,7 @@
                                     id="uploaded_file"
                                     name="uploaded_file"
                                     type="file" 
-                                    accept=".zip"
+                                    accept="*"
                                     />
                                 
                                 @error('uploaded_file')

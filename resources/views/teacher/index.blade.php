@@ -66,7 +66,12 @@
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->emp_code}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->name_prefix." ".$teacher->name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->email}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$teacher->mobile1.$teacher->mobile2?','.$teacher->mobile2:''}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    {{ $teacher->mobile1 }}
+                                    @if ($teacher->mobile2)
+                                        , {{ $teacher->mobile2 }}
+                                    @endif
+                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->addr1.','.$teacher->addr2}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->city->city_name}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{$teacher->status==1?'Active':'Inactive'}}</td>

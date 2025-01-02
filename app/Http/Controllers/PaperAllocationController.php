@@ -97,7 +97,7 @@ class PaperAllocationController extends Controller
         // $email_response = PhpMailController::send_paper_allot_email($email_to,$email_subject,$data_for_email);
         $email_response = $phpMailController->send_paper_allot_email($email_to,$email_subject,$data_for_email);
 
-        print_r($email_response);
+        // print_r($email_response);
 
 
         return redirect('paper_Allocation')->with('status','Paper Allocated Successfully');

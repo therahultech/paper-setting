@@ -89,11 +89,37 @@ class PaperController extends Controller
         ]
     );
 
-        if($request->hasFile('uploaded_file')){
-            $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
-            $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
-            $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+        // if($request->hasFile('uploaded_file')){
+        //     $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
+        //     $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
+        //     $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+        //     $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        // }
+
+        if ($request->hasFile('uploaded_file')) {
+            $file = $request->file('uploaded_file');
+            $originalExtension = $file->getClientOriginalExtension(); // Get the original file extension
+            $allowedExtensions = ['pdf', 'doc', 'docx', 'zip']; // Add allowed extensions as needed
+        
+            // Validate the file type
+            if (!in_array(strtolower($originalExtension), $allowedExtensions)) {
+                return response()->json(['error' => 'Invalid file type. Only PDF, Word documents, and ZIP files are allowed.'], 400);
+            }
+        
+            // Generate a dynamic file name with the original extension
+            $file_name_tmp = $request->input('course_id') . '_' . 
+                             $request->input('session_id') . '_' . 
+                             $request->input('event_id') . '_' . 
+                             $request->input('semester_id') . '_' . 
+                             $request->input('year_id') . '_' . 
+                             $request->input('subject_id') . '_' . 
+                             $request->input('exam_paper_id');
+        
+            $uploaded_fileName = $this->generateFileName($file_name_tmp, '_', $request->user()->id, $originalExtension);
+            $uploaded_filePath = $file->storeAs('public/syllabus', $uploaded_fileName);
             $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        
+            // Do something with the uploaded file URL if needed
         }
 
         $paper = new Paper;
@@ -163,12 +189,39 @@ class PaperController extends Controller
             'exam_paper_id'=>'required|max:10',
         ]);
 
-        if($request->hasFile('uploaded_file')){
-            $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
-            $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
-            $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+        // if($request->hasFile('uploaded_file')){
+        //     $file_name_tmp = $request->input('course_id').'_'.$request->input('session_id').'_'.$request->input('event_id').'_'.$request->input('semester_id').'_'.$request->input('year_id').'_'.$request->input('subject_id').'_'.$request->input('exam_paper_id');
+        //     $uploaded_fileName = $this->generateFileName($file_name_tmp,'_', $request->user()->id);
+        //     $uploaded_filePath = $request->file('uploaded_file')->storeAs('public/syllabus', $uploaded_fileName);
+        //     $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        // }
+
+        if ($request->hasFile('uploaded_file')) {
+            $file = $request->file('uploaded_file');
+            $originalExtension = $file->getClientOriginalExtension(); // Get the original file extension
+            $allowedExtensions = ['pdf', 'doc', 'docx', 'zip']; // Add allowed extensions as needed
+        
+            // Validate the file type
+            if (!in_array(strtolower($originalExtension), $allowedExtensions)) {
+                return response()->json(['error' => 'Invalid file type. Only PDF, Word documents, and ZIP files are allowed.'], 400);
+            }
+        
+            // Generate a dynamic file name with the original extension
+            $file_name_tmp = $request->input('course_id') . '_' . 
+                             $request->input('session_id') . '_' . 
+                             $request->input('event_id') . '_' . 
+                             $request->input('semester_id') . '_' . 
+                             $request->input('year_id') . '_' . 
+                             $request->input('subject_id') . '_' . 
+                             $request->input('exam_paper_id');
+        
+            $uploaded_fileName = $this->generateFileName($file_name_tmp, '_', $request->user()->id, $originalExtension);
+            $uploaded_filePath = $file->storeAs('public/syllabus', $uploaded_fileName);
             $uploaded_fileUrl = Storage::url($uploaded_filePath);
+        
+            // Do something with the uploaded file URL if needed
         }
+        
 
         $paper->course_id = $request->input('course_id');
         $paper->session_id = $request->input('session_id');
@@ -200,9 +253,15 @@ class PaperController extends Controller
         return redirect('paper')->with('status','Paper Deleted Successfully');
     }
 
-    private function generateFileName($paper_allocation_id,$set, $userId)
+    // private function generateFileName($paper_allocation_id,$set, $userId)
+    // {
+    //     return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
+    // }
+
+
+    private function generateFileName($paper_allocation_id, $set, $userId, $extension)
     {
-        return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . '.zip';
+        return "{$paper_allocation_id}_{$set}_user_id_{$userId}_" . time() . ".{$extension}";
     }
 
 
