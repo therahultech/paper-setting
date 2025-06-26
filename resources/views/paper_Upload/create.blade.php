@@ -225,7 +225,7 @@
                                 id="view_bill"
                                 name="view_bill"
                                 value="1"
-                                onclick="viewBill({{$paper_Allocations_with_upload[0]->id}})" 
+                                onclick="viewBill({{$paper_Allocations_with_upload[0]->paper_upload->id}})" 
                                 >
                                 View Remuneration Bill
                                 </button>
