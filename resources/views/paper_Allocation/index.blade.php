@@ -54,6 +54,8 @@
                         <thead class="border-b font-medium dark:border-neutral-500">
                             <tr class="border-b dark:border-neutral-500">
                                 <th scope="col" class="px-6 py-4">#</th>
+                                <th scope="col" class="px-6 py-4">Set1</th>
+                                <th scope="col" class="px-6 py-4">Set2</th>
                                 <th scope="col" class="px-6 py-4">Course</th>
                                 <th scope="col" class="px-6 py-4">Session</th>
                                 <th scope="col" class="px-6 py-4">Event</th>
@@ -63,8 +65,6 @@
                                 <th scope="col" class="px-6 py-4">Teacher</th>
                                 <th scope="col" class="px-6 py-4">Teacher's Dept</th>
                                 <th scope="col" class="px-6 py-4">Status</th>
-                                <th scope="col" class="px-6 py-4">Set1</th>
-                                <th scope="col" class="px-6 py-4">Set2</th>
                                 <th scope="col" class="px-6 py-4">Final Submit</th>
                                 <th scope="col" class="px-6 py-4">Actions</th>
 
@@ -74,15 +74,6 @@
                             @foreach($paper_Allocations as $tkey=>$paper_Allocation)
                             <tr class="border-b dark:border-neutral-500">
                                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{$tkey+1}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->course->code.'-'.$paper_Allocation->paper->course->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->session->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->event->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->semester->id?'Sem-'.$paper_Allocation->paper->semester->name:'Year'.$paper_Allocation->year->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->subject->code.'-'.$paper_Allocation->paper->subject->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->exam_paper_id}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->name_prefix.' '.$paper_Allocation->teacher->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->department->code.' '.$paper_Allocation->teacher->department->name}}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->status==1?'Active':'Inactive'}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     @if($paper_Allocation->paper_upload && $paper_Allocation->paper_upload->set1_uploaded)
 
@@ -191,6 +182,16 @@
 
                                     @endif                                                
                                 </td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->course->code.'-'.$paper_Allocation->paper->course->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->session->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->event->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->semester->id?'Sem-'.$paper_Allocation->paper->semester->name:'Year'.$paper_Allocation->year->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->subject->code.'-'.$paper_Allocation->paper->subject->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper->exam_paper_id}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->name_prefix.' '.$paper_Allocation->teacher->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->teacher->department->code.' '.$paper_Allocation->teacher->department->name}}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->status==1?'Active':'Inactive'}}</td>
+                                
                                 <td class="whitespace-nowrap px-6 py-4">{{$paper_Allocation->paper_upload && $paper_Allocation->paper_upload->final_submit ? 'Yes':'No'}}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
 
@@ -275,7 +276,7 @@
             }
             var set2SelectedValue = $('#set2_used_event_id').val();
             // var set2SelectedName = $('#set2_used_event_id').attr('name');    
-            var result = confirm("Do you want to use Set2 for selected Even1, As it can't be reversed.");
+            var result = confirm("Do you want to use Set2 for selected Event, As it can't be reversed.");
             if (result) {
             return true;
             }

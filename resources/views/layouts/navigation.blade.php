@@ -16,6 +16,38 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                @if(Auth::user()->hasAnyRole(['Super_Admin']))
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                        {{ __('Manage Users') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.index')">
+                        {{ __('Manage Roles') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.*')">
+                        {{ __('Manage Permissions') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <x-nav-link :href="route('admin.roles.permissions')" :active="request()->routeIs('admin.roles.permissions')">
+                    {{ __('Role-Permission Map') }}
+                </x-nav-link>
+
+                </div>
+
+
+                
+
+                @endif
+
                 @if(Auth::user()->hasAnyRole(['Super_Admin','Secrecy']))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">

@@ -18,6 +18,34 @@
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .print-container {
+                width: 210mm;
+                padding: 10mm;
+                box-sizing: border-box;
+            }
+
+            .print-container h1 {
+                font-size: 18pt;
+            }
+
+            .print-container h3 {
+                font-size: 12pt;
+            }
+
+            .print-container img {
+                max-width: 60px;
+                height: auto;
+            }
+        }
+    </style>
     
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -56,6 +84,19 @@
 
                 <!-- BILL START -->
                 <div class="container mx-auto py-8" id="bill_body">
+
+                    <div class="flex items-center justify-center mb-8 space-x-4 border-b pb-2">
+                        <img src="{{ asset('images/logo.png') }}" alt="GJUST LOGO" width="100" height="100">
+
+                        <div class="text-center">
+                            <h1 class="text-3xl font-bold text-green-700">
+                                Guru Jambheshwar University of Science & Technology, Hisar, Haryana
+                            </h1>
+                            <h3 class="font-bold text-gray-800">
+                                (A Haryana State Government University, Accredited 'A+' Grade by NAAC)
+                            </h3>
+                        </div>
+                    </div>
                     <div class="text-center mb-8">
                         <h1 class="text-3xl font-bold text-gray-800">Exam Paper Remuneration Bill</h1>
                         <h3 class="font-bold text-gray-800">(Auto Generated using Online Paper Setting Software)</h3>
@@ -122,15 +163,15 @@
                                     <p><span class="font-bold">Submitted To Secrecy Branch:</span> {{ $remunerationBill->submitted_to_secy?'Yes':'No' }}</p>
                                     <p><span class="font-bold">Secrecy Submit Datetime:</span> {{ $remunerationBill->submitted_to_secy_datetime }}</p>
                                     <p><span class="font-bold">Secrecy Branch Remarks:</span> {{ $remunerationBill->secy_remarks }}</p>
+                                    
+                                    <p><span class="font-bold">Submitted To Audit Branch:</span> {{ $remunerationBill->submitted_to_audit?'Yes':'No' }}</p>
+                                    <p><span class="font-bold">Audit Submit Datetime:</span> {{ $remunerationBill->submitted_to_audit_datetime }}</p>
+                                    <p><span class="font-bold">Audit Branch Remarks:</span> {{ $remunerationBill->audit_remarks }}</p>
 
                                     <p><span class="font-bold">Submitted To Account Branch:</span> {{ $remunerationBill->submitted_to_acc?'Yes':'No' }}</p>
                                     <p><span class="font-bold">Account Submit Datetime:</span> {{ $remunerationBill->submitted_to_acc_datetime }}</p>
                                     <p><span class="font-bold">Account Branch Remarks:</span> {{ $remunerationBill->acc_remarks }}</p>
                         
-                                    <p><span class="font-bold">Submitted To Audit Branch:</span> {{ $remunerationBill->submitted_to_audit?'Yes':'No' }}</p>
-                                    <p><span class="font-bold">Audit Submit Datetime:</span> {{ $remunerationBill->submitted_to_audit_datetime }}</p>
-                                    <p><span class="font-bold">Audit Branch Remarks:</span> {{ $remunerationBill->audit_remarks }}</p>
-
                                     <p><span class="font-bold">Bill Paid:</span> {{ $remunerationBill->bill_paid?'Yes':'No' }}</p>
                                     <p><span class="font-bold">Bill Paid Date:</span> {{ $remunerationBill->bill_paid_date }}</p>
 
@@ -223,43 +264,47 @@
                 @endif
 
 
-                    <script>
-                        function printBill() {
-                            const billContent = document.getElementById('bill_body').innerHTML;
+                <script>
+                    const logoUrl = "{{ url('images/logo.png') }}"; // Full logo path for print
 
-                            const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).map(
-                                (style) => style.outerHTML
-                            ).join('');
+                    function printBill() {
+                        const billContent = document.getElementById('bill_body').innerHTML;
 
-                            const printWindow = window.open('', '_blank');
-                            printWindow.document.open();
-                            printWindow.document.write(`
-                                <!DOCTYPE html>
-                                <html>
-                                <head>
-                                    <title>Print Bill</title>
-                                    ${stylesheets}
-                                    <style>
-                                        @media print {
-                                            body {
-                                                margin: 0;
-                                                padding: 0.25in;
-                                                font-size: 12px;
-                                            }
+                        const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).map(
+                            (style) => style.outerHTML
+                        ).join('');
+
+                        const updatedBillContent = billContent.replace(/src="[^"]*logo\.png"/g, `src="${logoUrl}"`);
+
+                        const printWindow = window.open('', '_blank');
+                        printWindow.document.open();
+                        printWindow.document.write(`
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <title>Print Bill</title>
+                                ${stylesheets}
+                                <style>
+                                    @media print {
+                                        body {
+                                            margin: 0;
+                                            padding: 0.25in;
+                                            font-size: 12px;
                                         }
-                                    </style>
-                                </head>
-                                <body>
-                                    <div>${billContent}</div>
-                                </body>
-                                </html>
-                            `);
-                            printWindow.document.close();
-                            printWindow.focus();
-                            printWindow.print();
-                            printWindow.onafterprint = () => printWindow.close();
-                        }
-                    </script>
+                                        img {
+                                            max-width: 80px;
+                                        }
+                                    }
+                                </style>
+                            </head>
+                            <body onload="window.print(); window.onafterprint = window.close;">
+                                <div>${updatedBillContent}</div>
+                            </body>
+                            </html>
+                        `);
+                        printWindow.document.close();
+                    }
+                </script>
 
                    <!-- BILL END -->
                     

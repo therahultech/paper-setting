@@ -14,6 +14,9 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\PhpMailController;
 use App\Http\Controllers\PasswordController;
 
+use App\Http\Controllers\UserRolePermissionController;
+use App\Http\Controllers\Admin\UserController; // ✅ Add this at the top
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,6 +52,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('paper/viewAllBill', [PaperController::class, 'viewAllBill']);
     Route::get('paper/viewBill/{id}',[PaperController::class, 'viewBill']);
     Route::post('paper/billUpdateOtherDeduct',[PaperController::class, 'billUpdateOtherDeduct']);
+    Route::post('paper/billSubmitToAudit',[PaperController::class, 'billSubmitToAudit']);
     Route::post('paper/billSubmitToAcc',[PaperController::class, 'billSubmitToAcc']);
 
     Route::resource('course',CourseController::class);
@@ -63,6 +67,68 @@ Route::group(['middleware' => 'auth'], function() {
     // Route::post('paper_Upload/create',[PaperUploadController::class, 'create']);
     
   });
+
+
+
+
+// Route::prefix('admin')->middleware(['auth'])->group(function () {
+//     Route::get('/roles', [UserRolePermissionController::class, 'index'])->name('roles.index');
+//     Route::post('/user/{user}/roles', [UserRolePermissionController::class, 'assignRole'])->name('user.assignRole');
+//     Route::post('/user/{user}/permissions', [UserRolePermissionController::class, 'assignPermission'])->name('user.assignPermission');
+//     Route::post('/roles/create', [UserRolePermissionController::class, 'createRole'])->name('roles.create');
+//     Route::post('/permissions/create', [UserRolePermissionController::class, 'createPermission'])->name('permissions.create');
+// });
+
+
+//admin role permission start
+
+Route::prefix('admin')->middleware(['auth', 'role:Super_Admin'])->name('admin.')->group(function () {
+    // Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+    Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
+
+    // Route::get('role-permissions', [\App\Http\Controllers\Admin\RolePermissionController::class, 'index'])->name('role_permissions.index');
+    // Route::post('role-permissions/update', [\App\Http\Controllers\Admin\RolePermissionController::class, 'update'])->name('role_permissions.update');
+    Route::get('role-permissions', [\App\Http\Controllers\Admin\RolePermissionController::class, 'index'])->name('roles.permissions');
+    Route::post('role-permissions/update', [\App\Http\Controllers\Admin\RolePermissionController::class, 'update'])->name('roles.permissions.update');
+
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::get('/users/{user}/roles-permissions', [UserController::class, 'rolesPermissions'])->name('users.roles-permissions');
+    Route::post('/users/{user}/roles-permissions', [UserController::class, 'updateRolesPermissions'])->name('users.roles-permissions.update');
+});
+
+
+
+
+
+// Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+//     // User Management
+//     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+//     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+//     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+
+//     // Role Management
+//     Route::resource('roles', RoleController::class)->except(['show']);
+
+//     // Permission Management
+//     Route::resource('permissions', PermissionController::class)->except(['show']);
+
+//     // Role-Permission Mapping
+//     Route::get('/roles/permissions', [RolePermissionController::class, 'index'])->name('roles.permissions');
+//     Route::post('/roles/permissions', [RolePermissionController::class, 'update'])->name('roles.permissions.update');
+// });
+
+
+
+
+//admin role premission end
+
 
 
 
