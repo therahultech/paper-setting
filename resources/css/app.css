@@ -23,3 +23,8 @@
 p {
   @apply leading-[1.6];
 } */
+
+[x-cloak] {
+    display: none !important;
+}
+

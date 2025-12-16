@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav id="sidenav-1" x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -17,35 +17,26 @@
                     </x-nav-link>
                 </div>
                 @if(Auth::user()->hasAnyRole(['Super_Admin']))
+                    <!-- Admin Dropdown -->
+                    <div class="hidden sm:flex sm:items-center sm:ml-10">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none">
+                                    Admin
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </x-slot>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                        {{ __('Manage Users') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.index')">
-                        {{ __('Manage Roles') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.*')">
-                        {{ __('Manage Permissions') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <x-nav-link :href="route('admin.roles.permissions')" :active="request()->routeIs('admin.roles.permissions')">
-                    {{ __('Role-Permission Map') }}
-                </x-nav-link>
-
-                </div>
-
-
-                
-
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('admin.users.index')">{{ __('Manage Users') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.roles.index')">{{ __('Manage Roles') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.permissions.index')">{{ __('Manage Permissions') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.roles.permissions')">{{ __('Role-Permission Map') }}</x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endif
 
                 @if(Auth::user()->hasAnyRole(['Super_Admin','Secrecy']))
@@ -149,6 +140,25 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+
+        @if(Auth::user()->hasAnyRole(['Super_Admin']))
+        <div class="pt-2 pb-3 space-y-1">
+            <div class="px-4 text-sm font-semibold text-gray-600">Admin</div>
+            <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                {{ __('Manage Users') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.index')">
+                {{ __('Manage Roles') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.*')">
+                {{ __('Manage Permissions') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.roles.permissions')" :active="request()->routeIs('admin.roles.permissions')">
+                {{ __('Role-Permission Map') }}
+            </x-responsive-nav-link>
+        </div>
+        @endif
+
         @if(Auth::user()->hasAnyRole(['Super_Admin','Secrecy']))
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
