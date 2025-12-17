@@ -63,7 +63,7 @@
                                 <th scope="col" class="px-6 py-4">Semster/Year</th>
                                 <th scope="col" class="px-6 py-4">Subject</th>
                                 <th scope="col" class="px-6 py-4">Paper ID</th>
-                                <th scope="col" class="px-6 py-4">File</th>
+                                <th scope="col" class="px-6 py-4">Syllabus</th>
                                 <th scope="col" class="px-6 py-4">Status</th>
                                 <th scope="col" class="px-6 py-4">Actions</th>
 
